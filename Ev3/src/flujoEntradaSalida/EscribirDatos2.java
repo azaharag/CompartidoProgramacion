@@ -17,9 +17,10 @@ public class EscribirDatos2 {
 		out.writeChar(c);
 		out.writeInt(n);
 		out.writeDouble(d);
-		out.writeBytes(t);
-		out.writeBytes(t2);
+		out.writeUTF(t);
+		out.writeUTF(t2);
 		out.close();
+		System.out.println("FIN DE PROGRAMA");
 
 	}
 
