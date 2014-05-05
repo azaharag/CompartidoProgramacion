@@ -34,14 +34,14 @@ public class Buscar {
 		    {listado=buscarRecursivo(ruta,cadena);
 		    return listado;}
 		     if (!igMayus && !recur)
-		     {listado=buscarMayusculaRecursivo(ruta,cadena);
+		     {listado=buscarMayusculaNoRecursivo(ruta,cadena);
 		     return listado;}
 				return listado;
 		
 		
 	}
 
-	private static ArrayList<ItemBusqueda> buscarMayusculaRecursivo(String ruta, String cadena) {
+	private static ArrayList<ItemBusqueda> buscarMayusculaNoRecursivo(String ruta, String cadena) {
 		File f=new File(ruta);
 		ArrayList<ItemBusqueda> encontrados= new ArrayList<ItemBusqueda>();
 		File[]lista=f.listFiles();
@@ -67,10 +67,6 @@ public class Buscar {
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-			}
-			else
-			{
-				buscarIgnorarMayusculaRecursivo(e.getAbsolutePath(), cadena);
 			}
 		}
 		return encontrados;
@@ -105,7 +101,7 @@ public class Buscar {
 			}
 			else
 			{
-				buscarIgnorarMayusculaRecursivo(e.getAbsolutePath(), cadena);
+				buscarRecursivo(e.getAbsolutePath(), cadena);
 			}
 		}
 		return encontrados;
