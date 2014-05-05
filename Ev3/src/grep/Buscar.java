@@ -121,7 +121,8 @@ public class Buscar {
 					while((linea=br.readLine())!=null)
 					{
 						String lineaMayus=linea.toUpperCase();
-						if(lineaMayus.indexOf(cadena)!=-1)
+						String cadenaMayus=cadena.toUpperCase();
+						if(lineaMayus.indexOf(cadenaMayus)!=-1)
 						{
 							ItemBusqueda item=new ItemBusqueda(e.getAbsolutePath(),linea);
 							encontrados.add(item);
@@ -153,7 +154,8 @@ public class Buscar {
 					while((linea=br.readLine())!=null)
 					{
 						String lineaMayus=linea.toUpperCase();
-						if(lineaMayus.indexOf(cadena)!=-1)
+						String cadenaMayus=cadena.toUpperCase();
+						if(lineaMayus.indexOf(cadenaMayus)!=-1)
 						{
 							ItemBusqueda item=new ItemBusqueda(e.getAbsolutePath(),linea);
 							encontrados.add(item);
