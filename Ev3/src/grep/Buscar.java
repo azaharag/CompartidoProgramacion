@@ -50,7 +50,7 @@ public class Buscar {
 			if(e.isFile())
 			{
 				try{
-					BufferedReader br=new BufferedReader(new FileReader(f));
+					BufferedReader br=new BufferedReader(new FileReader(e));
 					String linea;
 					while((linea=br.readLine())!=null)
 					{
@@ -68,6 +68,10 @@ public class Buscar {
 					e1.printStackTrace();
 				}
 			}
+			else
+			{
+				buscarIgnorarMayusculaRecursivo(e.getAbsolutePath(), cadena);
+			}
 		}
 		return encontrados;
 	}
@@ -81,7 +85,7 @@ public class Buscar {
 			if(e.isFile())
 			{
 				try{
-					BufferedReader br=new BufferedReader(new FileReader(f));
+					BufferedReader br=new BufferedReader(new FileReader(e));
 					String linea;
 					while((linea=br.readLine())!=null)
 					{
@@ -116,7 +120,7 @@ public class Buscar {
 			if(e.isFile())
 			{
 				try{
-					BufferedReader br=new BufferedReader(new FileReader(f));
+					BufferedReader br=new BufferedReader(new FileReader(e));
 					String linea;
 					while((linea=br.readLine())!=null)
 					{
@@ -148,7 +152,7 @@ public class Buscar {
 			if(e.isFile())
 			{
 				try{
-					BufferedReader br=new BufferedReader(new FileReader(f));
+					BufferedReader br=new BufferedReader(new FileReader(e));
 					String linea;
 					while((linea=br.readLine())!=null)
 					{
