@@ -19,14 +19,13 @@ public class Insertar10Filas {
 			
 			insertarContenido(sentencia_sql);
 			
-			ResultSet rs=mostrarContenido(sentencia_sql);
+			mostrarContenidoBis(sentencia_sql);
 			
 			Statement sentencia2_sql=conexion.createStatement();
 			
-			pasarMayusculas(sentencia2_sql,rs);
+			pasarMayusculas(sentencia_sql,sentencia2_sql);
 			
 			mostrarContenidoBis(sentencia_sql);
-			
 			
 			conexion.close();
 		} catch (ClassNotFoundException e) {
@@ -37,26 +36,18 @@ public class Insertar10Filas {
 
 	}
 
-	private static void pasarMayusculas(Statement sentencia2_sql, ResultSet rs) throws SQLException {
-		for(int i=0;i<10;i++)
-		{	String nombre=rs.getString(i+1);
-			String dni=rs.getString(i+1);
+	private static void pasarMayusculas(Statement sentencia2_sql, Statement sentencia_sql) throws SQLException {
+		ResultSet rs = sentencia_sql
+				.executeQuery("SELECT * FROM profesor");
+		while (rs.next())
+		{	String nombre=rs.getString(2);
+			String dni=rs.getString(1);
 			String sql="update profesor set nombre='"+nombre.toUpperCase()+"' where dni_profesor='"+dni+"'";
 			sentencia2_sql.executeUpdate(sql);
 		}
 		rs.close();
 	}
 
-	private static ResultSet mostrarContenido(Statement sentencia_sql) throws SQLException {
-		ResultSet rs = sentencia_sql
-				.executeQuery("SELECT * FROM profesor");
-		System.out.println("DNI PROFESOR\t NOMBRE");
-		while (rs.next())
-		{
-			System.out.println(rs.getString(1) + "\t\t" + rs.getString("nombre"));
-		}
-		return rs;
-	}
 	private static void mostrarContenidoBis(Statement sentencia_sql) throws SQLException
 	{
 		ResultSet rs = sentencia_sql
@@ -64,20 +55,19 @@ public class Insertar10Filas {
 		System.out.println("DNI PROFESOR\t NOMBRE");
 		while (rs.next())
 			System.out.println(rs.getString(1) + "\t\t" + rs.getString("nombre"));
+		rs.close();
 	}
 
 	private static void insertarContenido(Statement sentencia_sql) throws SQLException {
-		for(int i=0;i<10;i++)
+		for(int i=1;i<=10;i++)
 		{
-			String sql="INSERT INTO profesor VALUES"+"("+"'"+(i+1)+"'"+","+"'profesor "+(i+1)+"'"+")";
+			String sql="INSERT INTO profesor VALUES('"+i+"','profesor "+i+"')";
 			sentencia_sql.executeUpdate(sql);
 		}
-		
 	}
 
 	private static void borrarContenido(Statement sentencia_sql) throws SQLException {
 		sentencia_sql.executeUpdate("DELETE FROM profesor where DNI_PROFESOR >=1 AND DNI_PROFESOR<=10");
 		
 	}
-
 }
