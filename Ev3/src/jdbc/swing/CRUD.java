@@ -1,15 +1,20 @@
 package jdbc.swing;
 
 import java.awt.BorderLayout;
+import java.sql.*;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+
 import java.awt.Font;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -21,6 +26,8 @@ public class CRUD extends JFrame {
 	private JTextField campoFecha;
 	private JTextField campoTutor;
 	private JTextField info;
+	BaseDatosAlumno bd;
+	Alumno alumno;
 
 	/**
 	 * Launch the application.
@@ -28,7 +35,7 @@ public class CRUD extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
+				try {//comprobar la conexion antes de mostrar ventana 
 					CRUD frame = new CRUD();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -36,13 +43,19 @@ public class CRUD extends JFrame {
 				}
 			}
 		});
-		//Connection conexion
 	}
 
 	/**
 	 * Create the frame.
 	 */
 	public CRUD() {
+		try {
+			bd=new BaseDatosAlumno("localhost","root","admin","bd_alumno");
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "Error de conexión");
+			System.exit(0);
+		}
 		setTitle("Mantenimiento Alumnos");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 368);
@@ -94,7 +107,14 @@ public class CRUD extends JFrame {
 		JButton btnNewButton = new JButton("Alta/Consulta");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				String dni=campoDni.getText();
+				dni=dni.trim();
+				try {
+					alumno=bd.consultaAlumno(dni);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -113,8 +133,9 @@ public class CRUD extends JFrame {
 		
 		info = new JTextField();
 		info.setEditable(false);
-		info.setBounds(125, 271, 196, 53);
+		info.setBounds(124, 271, 196, 53);
 		contentPane.add(info);
 		info.setColumns(10);
 	}
+	
 }

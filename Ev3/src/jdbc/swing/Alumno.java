@@ -4,22 +4,18 @@ import java.util.Date;
 
 public class Alumno {
 	
-	String dni;
+	String dni;//si no tiene dni no se crea
 	String nombre;
 	String dniTutor;//select a la otra tabla para ligar el tutor
 	Date nacimiento;
 
-	//costruir alumno a partir de lo que devuelva el resultSet
-	//omitir el date
-	public Alumno consultaAlumno(String dni,Connection conexion)
-	{
-		//preparar sentencia, hacer select
-		//rs= select * from alumno where dni=?
-		//if( rs.next())
-		//{
-			//cargar el objeto
-		//}
-		//else return null;
+	
+
+	public Alumno(String dni, String nombre, String dniTutor) {
+		super();
+		this.dni = dni;
+		this.nombre = nombre;
+		this.dniTutor = dniTutor;
 	}
 
 	public String getDni() {
@@ -52,6 +48,12 @@ public class Alumno {
 
 	public void setNacimiento(Date nacimiento) {
 		this.nacimiento = nacimiento;
+	}
+
+	@Override
+	public String toString() {
+		return "Alumno [dni=" + dni + ", nombre=" + nombre + ", dniTutor="
+				+ dniTutor + "]";
 	}
 	
 	
