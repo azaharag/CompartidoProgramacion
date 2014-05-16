@@ -1,4 +1,4 @@
-package socket;
+package socketudp;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 
 import java.awt.Font;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
@@ -22,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketTimeoutException;
 
 public class UDPClient extends JFrame {
 
@@ -80,14 +82,13 @@ public class UDPClient extends JFrame {
 		contentPane.add(lblRecibido);
 		
 		dirIp = new JTextField();
-		dirIp.setBounds(94, 9, 86, 20);
+		dirIp.setBounds(94, 9, 109, 20);
 		contentPane.add(dirIp);
 		dirIp.setColumns(10);
 		
 		puerto = new JTextField();
-		puerto.setEditable(false);
-		puerto.setText("8888");
-		puerto.setBounds(94, 59, 86, 20);
+		puerto.setText("9876");
+		puerto.setBounds(94, 48, 109, 20);
 		contentPane.add(puerto);
 		puerto.setColumns(10);
 		
@@ -110,16 +111,24 @@ public class UDPClient extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try{
 				      DatagramSocket clientSocket = new DatagramSocket();
+				      clientSocket.setSoTimeout(500);
 				      InetAddress IPAddress = InetAddress.getByName(dirIp.getText());
 				      byte[] sendData = new byte[1024];
 				      byte[] receiveData = new byte[1024];
 				      String sentence = textEnvio.getText();
 				      sendData = sentence.getBytes();
 				      Integer puertoEnvio=Integer.parseInt(puerto.getText());
+				      Direccion dir=new Direccion(IPAddress,puertoEnvio);
+				      Mensaje m=new Mensaje(1,sentence);
 				      DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, puertoEnvio);
-				      clientSocket.send(sendPacket);
+				       clientSocket.send(sendPacket);
 				      DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-				      clientSocket.receive(receivePacket);
+				      try{
+				    	  clientSocket.receive(receivePacket);
+				      }catch(SocketTimeoutException stoE)
+				      {
+				    	  JOptionPane.showMessageDialog(contentPane, "Servidor "+IPAddress+" ("+puertoEnvio+") no responde");
+				      }
 				      String modifiedSentence = new String(receivePacket.getData());
 				      textRecibido.setText("Se ha recibido: "+modifiedSentence);
 				      clientSocket.close();
@@ -138,4 +147,6 @@ public class UDPClient extends JFrame {
 	public JTextArea getTextRecibido() {
 		return textRecibido;
 	}
+	
+	
 }

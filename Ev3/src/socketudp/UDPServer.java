@@ -1,4 +1,4 @@
-package socket;
+package socketudp;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -64,6 +64,7 @@ public class UDPServer extends JFrame {
 		contentPane.add(scrollPane);
 		
 		textoR = new JTextArea();
+		textoR.setEditable(false);
 		scrollPane.setViewportView(textoR);
 	}
 	public JTextArea getTextoR() {
@@ -80,7 +81,7 @@ public class UDPServer extends JFrame {
               String sentence = new String( receivePacket.getData());
               InetAddress IPAddress = receivePacket.getAddress();
               int port = receivePacket.getPort();
-              textoR.setText(textoR.getText()+"\n"+"<"+IPAddress+"> ("+port+"):"+sentence);
+              textoR.setText(textoR.getText()+"\n"+"<"+IPAddress+"> ("+port+"): "+sentence);
               String capitalizedSentence = sentence.toUpperCase();
               sendData = capitalizedSentence.getBytes();
               DatagramPacket sendPacket =
