@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Cronometro extends JFrame {
-
+//Está sin terminar. Hacer con contadores en vez de con Date
 	private JPanel contentPane;
 	private JTextField reloj;
 	Timer timer;
