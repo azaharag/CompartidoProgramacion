@@ -50,6 +50,14 @@ public class BaseDatos {
 		pw.println();
 		
 		rs=sentencia_sql.executeQuery("SELECT * FROM "+base+"."+tabla);
+		while(rs.next())
+		{
+			for(String col:cols)
+			{
+				pw.print(rs.getString(col)+";");
+			}
+			pw.println();
+		}
 		
 	}
 	
