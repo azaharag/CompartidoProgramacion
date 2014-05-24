@@ -42,7 +42,7 @@ public class BaseDatos {
 		}
 		else
 		{
-			pw = new PrintWriter("c:/Estructura/"+base+"."+tabla+".cvs");
+			pw = new PrintWriter("c:/Estructura/"+base+"."+tabla+".csv");
 		}
 		for(String col:cols){
 			pw.print(col+";");
@@ -58,7 +58,8 @@ public class BaseDatos {
 			}
 			pw.println();
 		}
-		
+		rs.close();
+		pw.close();
 	}
 	
 	public ArrayList<String> dameBaseDatos()
@@ -107,7 +108,7 @@ public class BaseDatos {
 	{
 		DatabaseMetaData meta;
 		ResultSet res;
-		ArrayList<String> columnas = null;
+		ArrayList<String> columnas = new ArrayList();
 		try {
 			meta = conexion.getMetaData();
 			res=meta.getColumns(base,null,table,"%");
@@ -121,5 +122,14 @@ public class BaseDatos {
 			e.printStackTrace();
 		}
 		return columnas;
+	}
+	public void desconectar()
+	{
+		try {
+			conexion.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
