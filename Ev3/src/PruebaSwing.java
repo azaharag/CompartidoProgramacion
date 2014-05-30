@@ -76,12 +76,8 @@ public class PruebaSwing extends JFrame {
 		
 		comboBox = new JComboBox();
 		comboBox.setToolTipText("selecciona");
-		comboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				comboBox.addItem("Hola");
-				comboBox.addItem("Adios");
-			}
-		});
+		comboBox.addItem("Hola");
+		comboBox.addItem("Adios");
 		comboBox.setBounds(241, 212, 150, 20);
 		contentPane.add(comboBox);
 		

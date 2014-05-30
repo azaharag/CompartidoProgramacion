@@ -1,35 +1,47 @@
-package importarTablas;
+package jTable;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.StringTokenizer;
-
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-
 
 public class BaseDatos {
 
 	Connection conexion;
 	
-	public BaseDatos(String IP,String usuario,String contra) throws ClassNotFoundException, SQLException
+	public BaseDatos(String IP,String usuario,String contra)
 	{
+		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conexion=DriverManager
 					.getConnection("jdbc:mysql://"+IP,usuario,contra);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		};
+	}
+	public BaseDatos(String IP,String usuario,String contra,String base)
+	{
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conexion=DriverManager
+					.getConnection("jdbc:mysql://"+IP+"/"+base,usuario,contra);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		};
 	}
 	
 	public void extraerTabla(String base,String tabla,String fich) throws FileNotFoundException, SQLException
@@ -64,120 +76,11 @@ public class BaseDatos {
 		pw.close();
 	}
 	
-	public void importarTabla(File f)
-	{
-		StringTokenizer st=new StringTokenizer(f.getName(),".");
-		String tab,bas;
-		bas=st.nextToken();
-		tab=st.nextToken();
-		
-		if(existeBase(bas, tab))
-		{
-			if(existeTabla(tab,bas))
-			{
-				JOptionPane.showMessageDialog(null, "La tabla ya existe","Error" ,JOptionPane.ERROR_MESSAGE);
-			}
-			else
-			{
-				//crear la tabla e insertar los datos
-						crearTabla(bas,tab,f);
-			}
-		}
-		else
-		{
-			//crear la base de datos y la tabla
-				crearBase(bas);
-				crearTabla(bas,tab,f);
-		}
-	}
-	
-	private boolean existeTabla(String tab,String base)
-	{
-		ArrayList<String> tablas=dameTablas(base);
-		for(String t:tablas)
-		{	 
-			if(tab.equals(t))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private boolean existeBase(String base, String tab)
-	{
-		ArrayList<String> bd=dameBaseDatos();
-		for(String i:bd)
-		{	
-			if(base.equals(i))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private void crearTabla(String base,String tabla,File f) 
-	{
-		try {
-			BufferedReader br=new BufferedReader(new FileReader(f));
-			String linea=br.readLine();
-			StringTokenizer st=new StringTokenizer(linea,";");
-			String prep="create table "+base+"."+tabla+"(";
-			while(st.hasMoreTokens())
-			{
-				prep=prep+st.nextToken()+" varchar(50), ";
-			}
-			prep=prep+")";
-			br.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		insertarDatos();
-	}
-
-	private void insertarDatos() 
-	{
-		
-		
-	}
-
-	private void crearBase(String base)
-	{
-		Statement sentencia;
-		try {
-			sentencia = conexion.createStatement();
-			String prep="create database "+base;
-			sentencia.executeUpdate(prep);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	boolean ficheroCorrecto(File f)
-	{
-		String t=f.getName();
-		String patron="[A-Z a-z]+\\.[A-Z a-z]+\\.csv";
-		if(t.matches(patron))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
 	public ArrayList<String> dameBaseDatos()
 	{
 		DatabaseMetaData meta;
 		ResultSet res;
-		ArrayList<String> bases=new ArrayList<String>();;
+		ArrayList<String> bases = null;
 		try {
 			meta = conexion.getMetaData();
 			res=meta.getCatalogs();
@@ -197,7 +100,7 @@ public class BaseDatos {
 	{
 		DatabaseMetaData meta;
 		ResultSet res;
-		ArrayList<String> tablas = new ArrayList<String>();
+		ArrayList<String> tablas = null;
 		try {
 			meta = conexion.getMetaData();
 			res=meta.getTables(base, null, "%", null);
@@ -242,5 +145,12 @@ public class BaseDatos {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public ResultSet extraerDatos(String base, String tabla) throws SQLException {
+		Statement sentencia_sql = conexion.createStatement();
+		ResultSet rs;
+		return rs=sentencia_sql.executeQuery("SELECT * FROM "+base+"."+tabla);
+		
 	}
 }
