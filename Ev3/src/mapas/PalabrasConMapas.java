@@ -31,7 +31,7 @@ public class PalabrasConMapas extends JFrame {
 	private JPanel contentPane;
 	private JTextField ruta;
 	private JTable table;
-	private Map<String,Integer> m;
+	private Map<String,Integer> m=new TreeMap<String,Integer>();
 	private DefaultTableModel dtm;
 
 	/**
@@ -108,24 +108,30 @@ public class PalabrasConMapas extends JFrame {
 					}
 					br.close();
 					String [] cabecera={"Palabra","Cantidad"};
-					
-					Object [][] datos=new Object[m.size()][2];
-					Set<Map.Entry<String,Integer>> conjunto=m.entrySet();
-					for(Map.Entry<String,Integer> ef:conjunto)
+					dtm=new DefaultTableModel(null,cabecera);
+					Object [] datos=new Object[2];
+					Set<String> clave=m.keySet();
+					for(String ef:clave)
 					{
-						for(int i=0;i<datos.length;i++)
-						{
-							datos[i][0]=ef.getKey();
-							datos[i][1]=ef.getValue();
-						}
+							datos[0]=ef;
+							datos[1]=m.get(ef);
+							dtm.addRow(datos);
 					}
-					dtm=new DefaultTableModel(datos,cabecera);
 					table.setModel(dtm);
+					//Alternativa con matriz
+					//Object [][] matriz=new Object [m.size()][2];
+					//int cont=0;
+					//for(TreeSet<String> s:m)
+					//{
+					//	matriz[cont][0]=s;
+					//	matriz[cont][1]=m.get(s);
+					//	cont++;
+					//}
+					//dtm=new DefaultTableModel(matriz,cabecera);
+					//table.setModel(dtm);
 				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -136,7 +142,7 @@ public class PalabrasConMapas extends JFrame {
 
 	protected void separaPalabras(String linea) {
 		StringTokenizer st=new StringTokenizer(linea," ./-,:;¿?¡!");
-		m=new TreeMap<String,Integer>();
+		
 		while(st.hasMoreTokens())
 		{
 			String palabra=st.nextToken();
@@ -151,4 +157,13 @@ public class PalabrasConMapas extends JFrame {
 			}
 		}
 	}
+	//Ordenar el mapa
+	//AL <Pareja> a=new AL();
+	//for(String s:m.keySet())
+	//{
+	//	Pareja p=new Pareja(s,m.get(s);
+	//	a.add(p)
+	//}
+	//Collections.sort(a);
+	//Ahora se puede mostrar ordenado 
 }
